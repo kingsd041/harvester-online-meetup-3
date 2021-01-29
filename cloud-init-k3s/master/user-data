@@ -1,0 +1,26 @@
+#cloud-config
+
+#设置密码
+password: ubuntu
+chpasswd: { expire: False }
+ssh_pwauth: True
+
+# 配置阿里云apt源
+apt:
+  primary:
+    - arches: [default]
+      uri: http://mirrors.aliyun.com/ubuntu/
+
+# 配置k3s mirror
+write_files:
+- content: |
+    mirrors:
+      "docker.io":
+        endpoint:
+          - "https://fogjl973.mirror.aliyuncs.com"
+          - "https://registry-1.docker.io"
+  path: /etc/rancher/k3s/registries.yaml
+
+# 启动K3S master
+runcmd:
+    - curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | K3S_TOKEN=rancher INSTALL_K3S_MIRROR=cn sh -

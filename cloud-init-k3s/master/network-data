@@ -1,0 +1,8 @@
+version: 1
+config:
+  - type: physical
+    name: enp1s0
+    subnets:
+      - type: static
+        address: 172.16.1.100/16
+        gateway: 172.16.0.1
