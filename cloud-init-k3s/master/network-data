@@ -6,3 +6,6 @@ config:
       - type: static
         address: 172.16.1.100/16
         gateway: 172.16.0.1
+        dns_nameservers:
+          - 114.114.114.114
+          - 114.114.115.115
