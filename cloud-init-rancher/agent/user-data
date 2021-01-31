@@ -1,0 +1,20 @@
+#cloud-config
+password: ubuntu
+chpasswd: { expire: False }
+ssh_pwauth: True
+# 配置阿里云源
+apt:
+  primary:
+    - arches: [default]
+      uri: http://mirrors.aliyun.com/ubuntu/
+# 配置docker mirror
+write_files:
+- content: |
+      {"registry-mirrors": ["https://fogjl973.mirror.aliyuncs.com"]}
+  path: /etc/docker/daemon.json
+# 安装docker
+packages:
+    - docker.io
+runcmd:
+  - wget https://hailong-work.oss-cn-shenzhen.aliyuncs.com/harvester/configure_rancher_node.sh -O /opt/configure_rancher_node.sh
+  - chmod a+x /opt/configure_rancher_node.sh && /opt/configure_rancher_node.sh 172.16.1.151 password "--etcd --controlplane --worker"
