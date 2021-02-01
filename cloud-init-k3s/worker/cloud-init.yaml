@@ -1,3 +1,12 @@
+# Network Data:
+version: 1
+config:
+  - type: physical
+    name: enp1s0
+    subnets:
+      - type: dhcp
+---
+User Data:
 #cloud-config
 password: ubuntu
 chpasswd: { expire: False }
