@@ -6,7 +6,7 @@ config:
     subnets:
       - type: dhcp
 ---
-User Data:
+# User Data:
 #cloud-config
 password: ubuntu
 chpasswd: { expire: False }
