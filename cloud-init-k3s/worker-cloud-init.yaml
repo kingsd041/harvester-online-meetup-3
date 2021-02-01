@@ -1,0 +1,34 @@
+# Network Data:
+version: 1
+config:
+  - type: physical
+    name: enp1s0
+    subnets:
+      - type: dhcp
+---
+# User Data:
+#cloud-config
+password: ubuntu
+chpasswd: { expire: False }
+ssh_pwauth: True
+
+# 配置阿里云源
+apt:
+  primary:
+    - arches: [default]
+      uri: http://mirrors.aliyun.com/ubuntu/
+
+# 配置k3s mirror
+write_files:
+- content: |
+    mirrors:
+      "docker.io":
+        endpoint:
+          - "https://fogjl973.mirror.aliyuncs.com"
+          - "https://registry-1.docker.io"
+  path: /etc/rancher/k3s/registries.yaml
+
+# 启动K3S agent
+runcmd:
+  - k3s_master_ip=172.16.1.100
+  - while true; do curl -sLk https://$k3s_master_ip:6443/ping && curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | K3S_TOKEN=rancher INSTALL_K3S_MIRROR=cn K3S_URL=https://$k3s_master_ip:6443 K3S_TOKEN=rancher sh - ;sleep 5 ;done
